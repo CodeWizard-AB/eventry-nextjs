@@ -1,6 +1,6 @@
 import EventList from "@/components/home/EventList";
 import SearchBar from "@/components/home/SearchBar";
-import Image from "next/image";
+import { Suspense } from "react";
 
 export default async function HomePage({ searchParams }) {
 	const query = (await searchParams).query || "";
@@ -8,7 +8,9 @@ export default async function HomePage({ searchParams }) {
 	return (
 		<section className="container">
 			<SearchBar />
-			<EventList query={query} />
+			<Suspense fallback={<div>Event Loading...</div>}>
+				<EventList query={query} />
+			</Suspense>
 		</section>
 	);
 }
