@@ -1,8 +1,13 @@
 import Event from "@/models/event";
 
-export async function getEvents() {
+export async function getEvents(query) {
 	try {
-		const events = await Event.find().lean();
+		const events = await Event.find({
+			$or: [
+				{ name: { $regex: new RegExp(query, "i") } },
+				{ details: { $regex: new RegExp(query, "i") } },
+			],
+		}).lean();
 		return events.map((event) => {
 			const eventObj = { id: event._id.toString(), ...event };
 			eventObj.interested_ids = event.interested_ids.map((id) => id.toString());
